@@ -1,4 +1,5 @@
 package com.sk.nytarticlesdashboard
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,54 +29,53 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 
-public class ArticleCellView {
 
-    @Composable
-    fun ArticleCellView(){
+@Composable
+fun ArticleCellView() {
 
-            Column {
-                Row(Modifier.fillMaxWidth()) {
-                    Image(
-                        painter = painterResource(id = R.drawable.baseline_image_24),
-                        contentDescription = null,
-                        Modifier
-                            .padding(10.dp)
-                            .size(100.dp)
-                    )
-
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp, end = 10.dp, bottom = 10.dp)
-                    ) {
-                        Text(
-                            text = "article title",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            modifier = Modifier
-                                .fillMaxWidth()
-
-
-                        )
-                        Spacer(modifier = Modifier.height(40.dp))
-                        Text(
-                            text = "1 day", modifier = Modifier
-                                .fillMaxWidth()
-
-                        )
-                    }
-                }
-                Divider()
-            }
-
-    }
-    @Preview(showBackground = true)
-    @Composable
-    fun CellPreview() {
-        NYTArticlesDashboardTheme {
-
-            ArticleCellView(
+    Column {
+        Row(Modifier.fillMaxWidth()) {
+            Image(
+                painter = painterResource(id = R.drawable.baseline_image_24),
+                contentDescription = null,
+                Modifier
+                    .padding(10.dp)
+                    .size(100.dp)
             )
+
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, end = 10.dp, bottom = 10.dp)
+            ) {
+                Text(
+                    text = "article title",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+
+                )
+                Spacer(modifier = Modifier.height(40.dp))
+                Text(
+                    text = "1 day", modifier = Modifier
+                        .fillMaxWidth()
+
+                )
+            }
         }
+        Divider()
+    }
+
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CellPreview() {
+    NYTArticlesDashboardTheme {
+
+        ArticleCellView(
+        )
     }
 }

@@ -1,6 +1,7 @@
 package com.sk.nytarticlesdashboard
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,13 +11,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -24,8 +29,10 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -38,11 +45,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.key.Key.Companion.Tab
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role.Companion.Tab
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
@@ -54,11 +66,11 @@ class AuthActivity : ComponentActivity() {
         listOf(
             TabItem(
                 title = "Login",
-                screen = { LoginScreen(content = "Account Page") }
+                screen = { LoginScreen() }
             ),
             TabItem(
                 title = "Register",
-                screen = { RegisterScreen(content = "Favorite list") }
+                screen = { RegisterScreen() }
             ),
         )
 
@@ -109,22 +121,19 @@ class AuthActivity : ComponentActivity() {
             }
         }
     }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Greeting( modifier: Modifier = Modifier) {
-
 
 }
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    content: String
+
 ) {
+
+    val mContext = LocalContext.current
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
@@ -149,7 +158,11 @@ fun LoginScreen(
             .fillMaxWidth())
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+
+                      mContext.startActivity(Intent(mContext,HomeActivity::class.java))
+
+            },
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary),
             modifier = Modifier
             .padding(top=20.dp,bottom = 20.dp, start = 20.dp, end = 20.dp)
@@ -160,22 +173,95 @@ fun LoginScreen(
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    content: String
+
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = content )
+        Image(
+            painter = painterResource(id = R.drawable.new_york_times_t_icon),
+            contentDescription = null,
+            modifier = Modifier
+                .size(width = 120.dp, 120.dp)
+                .padding(top = 20.dp)
+        )
+        OutlinedTextField(value = "", onValueChange = {
+            it.length
+        }, label = { Text(text = "Full Name") }, modifier = Modifier
+            .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .fillMaxWidth()
+        )
+
+        OutlinedTextField(value = "", onValueChange = {
+            it.length
+        }, label = { Text(text = "Email") }, modifier = Modifier
+            .padding( start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .fillMaxWidth()
+        )
+
+        OutlinedTextField(value = "", onValueChange = {
+            it.length
+        }, label = { Text(text = "National ID") }, modifier = Modifier
+            .padding( start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .fillMaxWidth()
+        )
+
+        OutlinedTextField(value = "", onValueChange = {
+            it.length
+        }, label = { Text(text = "Phone Number") }, modifier = Modifier
+            .padding( start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .fillMaxWidth()
+        )
+
+        OutlinedButton(
+            onClick = { /*TODO*/ },
+            contentPadding = PaddingValues(17.dp),
+
+            shape = RoundedCornerShape(5.dp),
+            modifier = Modifier
+                .padding( bottom = 20.dp, start = 20.dp, end = 20.dp)
+                .fillMaxWidth()
+
+        ) {
+
+            Text(text = "Date Of Birth", textAlign = TextAlign.Start, fontWeight = FontWeight.Normal,modifier = Modifier.fillMaxWidth())
+        }
+
+        OutlinedTextField(value = "",
+            onValueChange = {
+                it.length
+            },
+            label = { Text(text = "Password") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            modifier = Modifier
+                .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
+                .fillMaxWidth()
+        )
+
+        Button(
+            onClick = { /*TODO*/ },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
+            modifier = Modifier
+                .padding(top = 20.dp, bottom = 20.dp, start = 20.dp, end = 20.dp)
+                .fillMaxWidth()
+        ) {
+
+            Text(text = "Register")
+        }
     }
 }
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     NYTArticlesDashboardTheme {
-        Greeting()
+
     }
 }
