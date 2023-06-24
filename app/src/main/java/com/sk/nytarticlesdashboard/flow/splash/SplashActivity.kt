@@ -1,6 +1,7 @@
-package com.sk.nytarticlesdashboard
+package com.sk.nytarticlesdashboard.flow.splash
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,17 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
+import com.sk.nytarticlesdashboard.R
 import com.sk.nytarticlesdashboard.base.AppPrefrencesHelper
 import com.sk.nytarticlesdashboard.base.LocalHelper
-import com.sk.nytarticlesdashboard.flow.splash.SplashViewModel
+import com.sk.nytarticlesdashboard.flow.auth.AuthActivity
+import com.sk.nytarticlesdashboard.flow.home.HomeActivity
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -37,7 +34,6 @@ class SplashActivity : ComponentActivity() {
     private val viewModel:SplashViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LocalHelper().setLocal(AppPrefrencesHelper().getPreferredLanguage(this), context = this)
 
         setContent {
             NYTArticlesDashboardTheme {
@@ -54,6 +50,11 @@ class SplashActivity : ComponentActivity() {
 
 }
 
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(
+            LocalHelper.setLocale(newBase, AppPrefrencesHelper.getPreferredLanguage(newBase))
+        )
+    }
 @Composable
 fun SplashScreenView( modifier: Modifier = Modifier,viewModel:SplashViewModel) {
 
@@ -68,14 +69,14 @@ fun SplashScreenView( modifier: Modifier = Modifier,viewModel:SplashViewModel) {
 
     when(viewModel.pathState){
         "Login"->{
-            val intent = Intent(this@SplashActivity,AuthActivity::class.java)
+            val intent = Intent(this@SplashActivity, AuthActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
 
         }
 
         "Home"->{
-            val intent = Intent(this@SplashActivity,HomeActivity::class.java)
+            val intent = Intent(this@SplashActivity, HomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
 

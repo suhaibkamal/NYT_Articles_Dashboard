@@ -1,4 +1,4 @@
-package com.sk.nytarticlesdashboard
+package com.sk.nytarticlesdashboard.flow.home
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,9 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sk.nytarticlesdashboard.flow.auth.AuthActivity
+import com.sk.nytarticlesdashboard.R
+import com.sk.nytarticlesdashboard.flow.splash.SplashActivity
 import com.sk.nytarticlesdashboard.base.AppPrefrencesHelper
-import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 
 @Composable
@@ -150,7 +150,7 @@ fun MoreScreen(modifier: Modifier = Modifier,homeViewModel: HomeViewModel) {
         Button(
             onClick = { homeViewModel.logout()
 
-                val intent = Intent(context,AuthActivity::class.java)
+                val intent = Intent(context, AuthActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 context.startActivity(intent)
                       },
@@ -175,11 +175,11 @@ fun basicAlert(context: Context){
         setTitle(context.getString(R.string.language))
         setMessage(context.getString(R.string.select_your_language_please))
         setPositiveButton(context.getString(R.string.arabic), DialogInterface.OnClickListener { dialogInterface, i ->
-            AppPrefrencesHelper().savePreferredLanguage(context,"ar")
+            AppPrefrencesHelper.savePreferredLanguage(context,"ar")
             restartTheApp(context)
         }).
         setNegativeButton(R.string.english, DialogInterface.OnClickListener { dialogInterface, i ->
-            AppPrefrencesHelper().savePreferredLanguage(context,"en")
+            AppPrefrencesHelper.savePreferredLanguage(context,"en")
             restartTheApp(context)
         }).
         show()

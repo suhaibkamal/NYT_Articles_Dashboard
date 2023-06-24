@@ -17,6 +17,6 @@ class AuthRepository @Inject constructor(val context:Application,val userDAO: Us
     }
 
     override suspend fun saveUserId(id: Int) {
-        AppPrefrencesHelper().saveLoggedInUserId(context,id)
+        AppPrefrencesHelper.saveLoggedInUserId(context,id)
     }
 }

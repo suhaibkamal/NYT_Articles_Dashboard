@@ -9,6 +9,6 @@ import javax.inject.Inject
 class SplashRepository @Inject constructor(val context: Application): SplashRepositoryInterface{
 
     override suspend fun isUserLoggedIn(): Boolean {
-        return AppPrefrencesHelper().getLoggedInUserId(context = context)>0
+        return AppPrefrencesHelper.getLoggedInUserId(context = context)>0
     }
 }

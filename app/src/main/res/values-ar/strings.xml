@@ -1,0 +1,22 @@
+<resources>
+
+    <string name="server_error">حدث خطأ مجهول</string>
+    <string name="dashboard">لوحة المقالات</string>
+    <string name="more">المزيد</string>
+    <string name="register">تسجيل</string>
+    <string name="password">كلمة المرور</string>
+    <string name="date_of_birth_must_be_selected">يجب ألا يكون تاريخ الميلاد فارغًا</string>
+    <string name="this_field_must_not_be_empty">يجب ألا يكون هذا الحقل فارغًا</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="national_id">الرقم الوطني</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="full_name">الاسم الكامل</string>
+    <string name="details">التفاصيل</string>
+    <string name="date_of_birth">تاريخ الميلاد</string>
+    <string name="language">اللغة</string>
+    <string name="logout">تسجيل الخروج</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="select_your_language_please">اختر لغتك المفضلة</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
+</resources>

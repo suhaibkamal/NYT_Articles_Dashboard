@@ -1,10 +1,9 @@
-package com.sk.nytarticlesdashboard
+package com.sk.nytarticlesdashboard.flow.home
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 
 /**
 #     #     #   #

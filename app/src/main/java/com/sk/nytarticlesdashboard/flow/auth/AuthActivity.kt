@@ -1,14 +1,10 @@
-package com.sk.nytarticlesdashboard
+package com.sk.nytarticlesdashboard.flow.auth
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.widget.DatePicker
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -60,9 +56,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sk.nytarticlesdashboard.R
 import com.sk.nytarticlesdashboard.base.AppPrefrencesHelper
 import com.sk.nytarticlesdashboard.base.LocalHelper
-import com.sk.nytarticlesdashboard.flow.auth.AuthViewModel
+import com.sk.nytarticlesdashboard.flow.home.HomeActivity
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -88,10 +85,15 @@ class AuthActivity : ComponentActivity() {
                 screen = { RegisterScreen(viewModel =viewModel) }
             ),
         )
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(
+            LocalHelper.setLocale(newBase, AppPrefrencesHelper.getPreferredLanguage(newBase))
+        )
+    }
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LocalHelper().setLocal(AppPrefrencesHelper().getPreferredLanguage(this), context = this)
         setContent {
 
             val pagerState = rememberPagerState()

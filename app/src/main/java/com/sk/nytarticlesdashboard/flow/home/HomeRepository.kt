@@ -40,10 +40,10 @@ class HomeRepository @Inject constructor(val context: Application, val userDAO: 
     }
 
     override suspend fun getUserById(): UserModel {
-        return userDAO.getUserById(AppPrefrencesHelper().getLoggedInUserId(context))
+        return userDAO.getUserById(AppPrefrencesHelper.getLoggedInUserId(context))
     }
 
     override suspend fun removeUserSession() {
-        AppPrefrencesHelper().saveLoggedInUserId(context,0)
+        AppPrefrencesHelper.saveLoggedInUserId(context,0)
     }
 }

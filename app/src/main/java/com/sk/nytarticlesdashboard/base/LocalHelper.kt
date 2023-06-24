@@ -1,22 +1,36 @@
 package com.sk.nytarticlesdashboard.base
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
 import java.util.Locale
 
-class LocalHelper {
+object LocalHelper {
+    fun setLocale(context: Context, language: String): Context? {
 
-    fun setLocal(language: String?, context: Context) {
-        val locale = Locale(language)
-        val resources = context.resources
-        val displayMetrics = resources.displayMetrics
-        val configuration = resources.configuration
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            configuration.setLocale(locale)
-        } else {
-            configuration.locale = locale
+            return updateResources(context, language);
         }
+        return updateResourcesLegacy(context, language);
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private fun updateResources(context: Context, language: String): Context? {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val configuration = context.resources.configuration
+        configuration.setLocale(locale)
         configuration.setLayoutDirection(locale)
-        resources.updateConfiguration(configuration, displayMetrics)
+        return context.createConfigurationContext(configuration)
+    }
+
+    private fun updateResourcesLegacy(context: Context, language: String): Context {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val resources = context.resources
+        val configuration = resources.configuration
+        configuration.locale = locale
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        return context
     }
 }

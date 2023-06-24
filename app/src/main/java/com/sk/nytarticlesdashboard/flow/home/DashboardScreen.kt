@@ -1,6 +1,5 @@
-package com.sk.nytarticlesdashboard
+package com.sk.nytarticlesdashboard.flow.home
 
-import android.text.TextUtils
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -21,9 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
-import kotlinx.coroutines.flow.asStateFlow
 
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)

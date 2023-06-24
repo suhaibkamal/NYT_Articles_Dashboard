@@ -1,4 +1,4 @@
-package com.sk.nytarticlesdashboard
+package com.sk.nytarticlesdashboard.flow.auth
 
 import androidx.compose.runtime.Composable
 

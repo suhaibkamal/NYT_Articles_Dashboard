@@ -1,6 +1,7 @@
 package com.sk.nytarticlesdashboard
 
 import android.app.Application
+import android.content.Context
 import com.sk.nytarticlesdashboard.base.AppPrefrencesHelper
 import com.sk.nytarticlesdashboard.base.LocalHelper
 import dagger.hilt.android.HiltAndroidApp
@@ -10,7 +11,12 @@ public class NYTArticlesApp : Application()  {
 
     override fun onCreate() {
         super.onCreate()
-        LocalHelper().setLocal(AppPrefrencesHelper().getPreferredLanguage(this), this)
 
+
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(AppPrefrencesHelper.getPreferredLanguage(base)
+            ?.let { LocalHelper.setLocale(context =base , it) })
     }
 }

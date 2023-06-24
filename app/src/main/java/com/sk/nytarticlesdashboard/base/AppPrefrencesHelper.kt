@@ -2,7 +2,7 @@ package com.sk.nytarticlesdashboard.base
 
 import android.content.Context
 
-public  class AppPrefrencesHelper {
+public  object AppPrefrencesHelper {
 
     private val PRE_LANG= "Lan"
     private val USER_ID = "user_id"
@@ -23,8 +23,8 @@ public  class AppPrefrencesHelper {
         sharedPref.edit().putString(PRE_LANG,lg).apply()
     }
 
-    public fun getPreferredLanguage(context: Context): String? {
+    public fun getPreferredLanguage(context: Context): String {
         val sharedPref = context.getSharedPreferences(USER_SHARED_PREF,Context.MODE_PRIVATE)
-        return sharedPref.getString(PRE_LANG,"en")
+        return sharedPref.getString(PRE_LANG,"en")!!
     }
 }

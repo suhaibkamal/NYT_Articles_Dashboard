@@ -16,15 +16,15 @@
         android:theme="@style/Theme.NYTArticlesDashboard"
         tools:targetApi="31">
         <activity
-            android:name=".AuthActivity"
+            android:name=".flow.auth.AuthActivity"
             android:exported="false"
             android:theme="@style/Theme.NYTArticlesDashboard" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".flow.home.HomeActivity"
             android:exported="false"
             android:theme="@style/Theme.NYTArticlesDashboard" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".flow.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.NYTArticlesDashboard">
             <intent-filter>

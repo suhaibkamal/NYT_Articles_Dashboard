@@ -1,4 +1,4 @@
-package com.sk.nytarticlesdashboard
+package com.sk.nytarticlesdashboard.flow.home
 
 
 import androidx.compose.foundation.background
@@ -13,16 +13,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
