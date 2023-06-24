@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sk.nytarticlesdashboard.base.AppPrefrencesHelper
+import com.sk.nytarticlesdashboard.base.LocalHelper
 import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +31,8 @@ class HomeActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LocalHelper().setLocal(AppPrefrencesHelper().getPreferredLanguage(this), context = this)
+
         setContent {
             NYTArticlesDashboardTheme {
                 // A surface container using the 'background' color from the theme

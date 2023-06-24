@@ -7,11 +7,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 open class BaseViewModel  @Inject constructor(): ViewModel(){
-    var showLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    var showLoading = MutableStateFlow(false)
+
 
 
     var handleErrorLiveData by mutableStateOf(Throwable())
@@ -20,13 +23,6 @@ open class BaseViewModel  @Inject constructor(): ViewModel(){
         super.onCleared()
     }
 
-    fun showLoading() {
-        showLoadingLiveData.value = true
-    }
-
-    fun hideLoading() {
-        showLoadingLiveData.value = false
-    }
 
     fun handleError(throwable: Throwable) {
         handleErrorLiveData = throwable

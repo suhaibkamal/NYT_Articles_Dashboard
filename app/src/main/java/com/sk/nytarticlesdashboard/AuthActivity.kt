@@ -1,8 +1,11 @@
 package com.sk.nytarticlesdashboard
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -40,7 +43,11 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,9 +56,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sk.nytarticlesdashboard.base.AppPrefrencesHelper
+import com.sk.nytarticlesdashboard.base.LocalHelper
 import com.sk.nytarticlesdashboard.flow.auth.AuthViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,10 +91,14 @@ class AuthActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LocalHelper().setLocal(AppPrefrencesHelper().getPreferredLanguage(this), context = this)
         setContent {
 
             val pagerState = rememberPagerState()
             val coroutineScope = rememberCoroutineScope()
+            var titleState by remember {
+                mutableStateOf("")
+            }
             NYTArticlesDashboardTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -92,7 +106,7 @@ class AuthActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold(
-                        topBar = { CenterAlignedTopAppBar(title = { Text(text = stringResource(id = R.string.app_name))}, colors = TopAppBarDefaults.centerAlignedTopAppBarColors (
+                        topBar = { CenterAlignedTopAppBar(title = { Text(text = titleState)}, colors = TopAppBarDefaults.centerAlignedTopAppBarColors (
                             containerColor = colorScheme.primary,
                             titleContentColor = colorScheme.onPrimary
                         )) },
@@ -117,6 +131,7 @@ class AuthActivity : ComponentActivity() {
                                     state = pagerState
                                 ) {
                                     tabs[pagerState.currentPage].screen()
+                                    titleState = tabs[pagerState.currentPage].title
                                 }
                             }
                         })
@@ -126,6 +141,7 @@ class AuthActivity : ComponentActivity() {
     }
 
 }
+
 
 
 @SuppressLint("UnrememberedMutableState")
@@ -161,10 +177,10 @@ viewModel: AuthViewModel
             }, isError = viewModel.loginEmailStateError,
                 supportingText = {
                     if(viewModel.loginEmailStateError){
-                        Text(text = "this field must not be empty")
+                        Text(text = stringResource(id = R.string.this_field_must_not_be_empty))
                     }
                 },
-                label = { Text(text = "Email") }, modifier = Modifier
+                label = { Text(text = stringResource(id = R.string.email)) }, modifier = Modifier
                     .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
                     .fillMaxWidth()
             )
@@ -176,14 +192,14 @@ viewModel: AuthViewModel
                 isError = viewModel.loginPasswordStateError,
                 supportingText = {
                 if(viewModel.loginPasswordStateError){
-                    Text(text = "this field must not be empty")
+                    Text(text = stringResource(id = R.string.this_field_must_not_be_empty))
                 }
                 },
-                label = { Text(text = "Password") },
+                label = { Text(text = stringResource(id = R.string.password)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier
                     .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(), visualTransformation = PasswordVisualTransformation()
             )
 
             Button(
@@ -201,7 +217,7 @@ viewModel: AuthViewModel
                     .fillMaxWidth()
             ) {
 
-                Text(text = "Login")
+                Text(text = stringResource(id = R.string.login))
 
             }
         }
@@ -231,50 +247,50 @@ viewModel: AuthViewModel
         )
         OutlinedTextField(value = viewModel.registerFullNameState, onValueChange = {
             viewModel.registerFullNameState =it
-        }, label = { Text(text = "Full Name") }, isError = viewModel.registerFullNameStateError,
+        }, label = { Text(text =stringResource(id = R.string.full_name)) }, isError = viewModel.registerFullNameStateError,
             supportingText = {
                 if(viewModel.registerFullNameStateError) {
-                    Text(text = "this field must not be empty")
+                    Text(text = stringResource(id = R.string.this_field_must_not_be_empty))
                 }
             }, modifier = Modifier
-            .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
-            .fillMaxWidth()
+                .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
+                .fillMaxWidth()
         )
 
         OutlinedTextField(value = viewModel.registerEmailState, onValueChange = {
             viewModel.registerEmailState = it
-        }, label = { Text(text = "Email") } , isError = viewModel.registerEmailStateError,
+        }, label = { Text(text = stringResource(id = R.string.email)) } , isError = viewModel.registerEmailStateError,
             supportingText = {
                 if(viewModel.registerEmailStateError) {
-                    Text(text = "this field must not be empty")
+                    Text(text = stringResource(id = R.string.this_field_must_not_be_empty))
                 }
             },modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-            .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+                .fillMaxWidth()
         )
 
         OutlinedTextField(value = viewModel.registerNationalIDState, onValueChange = {
             viewModel.registerNationalIDState= it
-        }, label = { Text(text = "National ID") }, isError = viewModel.registerNationalIDStateError,
+        }, label = { Text(text = stringResource(id = R.string.national_id)) }, isError = viewModel.registerNationalIDStateError,
             supportingText = {
                 if(viewModel.registerNationalIDStateError) {
-                    Text(text = "this field must not be empty")
+                    Text(text = stringResource(id = R.string.this_field_must_not_be_empty))
                 }
             },modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-            .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+                .fillMaxWidth()
         )
 
         OutlinedTextField(value =viewModel.registerPhoneState, onValueChange = {
             viewModel.registerPhoneState = it
-        }, label = { Text(text = "Phone Number") }, isError = viewModel.registerPhoneStateError,
+        }, label = { Text(text = stringResource(id = R.string.phone_number)) }, isError = viewModel.registerPhoneStateError,
             supportingText = {
                 if(viewModel.registerPhoneStateError) {
-                    Text(text = "this field must not be empty")
+                    Text(text = stringResource(id = R.string.this_field_must_not_be_empty))
                 }
             }, modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-            .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+                .fillMaxWidth()
         )
 
         OutlinedButton(
@@ -294,7 +310,7 @@ viewModel: AuthViewModel
 
             if(viewModel.registerDateOfBirthStateError){
                 Text(
-                    text = "Date of birth must be selected",
+                    text = stringResource(id = R.string.date_of_birth_must_be_selected),
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Normal,
                     color = Color.Red,
@@ -310,7 +326,6 @@ viewModel: AuthViewModel
                 )
             }
         }
-
         OutlinedTextField(value = viewModel.registerPasswordState,
             onValueChange = {
                 viewModel.registerPasswordState = it
@@ -321,11 +336,11 @@ viewModel: AuthViewModel
                     Text(text = "this field must not be empty")
                 }
             },
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(id = R.string.password)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(), visualTransformation = PasswordVisualTransformation()
         )
 
         Button(
@@ -339,10 +354,12 @@ viewModel: AuthViewModel
                 .fillMaxWidth()
         ) {
 
-            Text(text = "Register")
+            Text(text = stringResource(id = R.string.register))
         }
     }
 }
+
+
 
 fun showDatePicker(context: Context,viewModel: AuthViewModel) {
 

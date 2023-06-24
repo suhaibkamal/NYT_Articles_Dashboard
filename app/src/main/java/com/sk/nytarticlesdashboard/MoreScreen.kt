@@ -1,5 +1,10 @@
 package com.sk.nytarticlesdashboard
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,21 +25,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sk.nytarticlesdashboard.base.AppPrefrencesHelper
 import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 
 @Composable
 fun MoreScreen(modifier: Modifier = Modifier,homeViewModel: HomeViewModel) {
-
+    val context = LocalContext.current;
     Column(
-        modifier = Modifier.fillMaxSize().padding(40.dp).verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(40.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(Modifier.fillMaxWidth()) {
@@ -53,7 +66,7 @@ fun MoreScreen(modifier: Modifier = Modifier,homeViewModel: HomeViewModel) {
                     .padding(top = 10.dp, end = 10.dp, bottom = 10.dp)
             ) {
                 Text(
-                    text = homeViewModel.userState.fullName,
+                    text = homeViewModel.userState.collectAsState().value.fullName,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
                     modifier = Modifier
@@ -64,7 +77,7 @@ fun MoreScreen(modifier: Modifier = Modifier,homeViewModel: HomeViewModel) {
                 )
 
                 Text(
-                    text =  homeViewModel.userState.email, modifier = Modifier
+                    text =  homeViewModel.userState.collectAsState().value.email, modifier = Modifier
                         .padding(start = 10.dp)
                         .fillMaxWidth()
 
@@ -73,7 +86,7 @@ fun MoreScreen(modifier: Modifier = Modifier,homeViewModel: HomeViewModel) {
         }
 
         Text(
-            text = "Details",
+            text = stringResource(id = R.string.details),
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold,
             modifier = Modifier
@@ -83,39 +96,39 @@ fun MoreScreen(modifier: Modifier = Modifier,homeViewModel: HomeViewModel) {
 
         )
         Text(
-            text = "National ID", modifier = Modifier
+            text = stringResource(id = R.string.national_id), modifier = Modifier
                 .padding(start = 10.dp)
                 .fillMaxWidth()
 
         )
 
         Text(
-            text = homeViewModel.userState.nationalNumber, modifier = Modifier
+            text = homeViewModel.userState.collectAsState().value.nationalNumber, modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
                 .fillMaxWidth()
 
         )
         Text(
-            text = "Phone Number", modifier = Modifier
+            text = stringResource(id = R.string.phone_number), modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
                 .fillMaxWidth()
 
         )
         Text(
-            text = homeViewModel.userState.phone, modifier = Modifier
+            text = homeViewModel.userState.collectAsState().value.phone, modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
                 .fillMaxWidth()
 
         )
 
         Text(
-            text = "Date of Birth", modifier = Modifier
+            text = stringResource(id = R.string.date_of_birth), modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
                 .fillMaxWidth()
 
         )
         Text(
-            text = homeViewModel.userState.dateOfBirth, modifier = Modifier
+            text = homeViewModel.userState.collectAsState().value.dateOfBirth, modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
                 .fillMaxWidth()
 
@@ -124,29 +137,67 @@ fun MoreScreen(modifier: Modifier = Modifier,homeViewModel: HomeViewModel) {
         Spacer(modifier = Modifier.height(40.dp))
 
         OutlinedButton(
-            onClick = { /*TODO*/ },
+            onClick = { basicAlert(context) },
             modifier = Modifier
-                .padding(top=20.dp,bottom = 20.dp, start = 20.dp, end = 20.dp)
+                .padding(top = 20.dp, bottom = 20.dp, start = 20.dp, end = 20.dp)
                 .fillMaxWidth()) {
 
-            Text(text = "Language")
+            Text(text = stringResource(id = R.string.language))
 
         }
         Divider()
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { homeViewModel.logout()
+
+                val intent = Intent(context,AuthActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                context.startActivity(intent)
+                      },
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary),
             modifier = Modifier
-                .padding(top=20.dp,bottom = 20.dp, start = 20.dp, end = 20.dp)
+                .padding(top = 20.dp, bottom = 20.dp, start = 20.dp, end = 20.dp)
                 .fillMaxWidth()) {
 
-            Text(text = "Logout")
+            Text(text = stringResource(id = R.string.logout))
 
         }
     }
 
 }
+
+fun basicAlert(context: Context){
+
+    val builder = AlertDialog.Builder(context)
+
+    with(builder)
+    {
+        setTitle(context.getString(R.string.language))
+        setMessage(context.getString(R.string.select_your_language_please))
+        setPositiveButton(context.getString(R.string.arabic), DialogInterface.OnClickListener { dialogInterface, i ->
+            AppPrefrencesHelper().savePreferredLanguage(context,"ar")
+            restartTheApp(context)
+        }).
+        setNegativeButton(R.string.english, DialogInterface.OnClickListener { dialogInterface, i ->
+            AppPrefrencesHelper().savePreferredLanguage(context,"en")
+            restartTheApp(context)
+        }).
+        show()
+    }
+
+
+}
+
+fun restartTheApp(context: Context) {
+    val intent = Intent(context, SplashActivity::class.java)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    context.startActivity(intent)
+    if (context is Activity) {
+        (context as Activity).finish()
+    }
+    Runtime.getRuntime().exit(0)
+}
+
 
 
 @Preview(showBackground = true)

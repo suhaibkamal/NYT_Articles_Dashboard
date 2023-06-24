@@ -13,4 +13,5 @@ interface HomeRepositoryInterface {
     suspend fun insertArticle(articles: List<ArticleCellModel>)
     suspend fun getArticles(): List<ArticleCellModel>
     suspend fun getUserById(): UserModel
+    suspend fun removeUserSession()
 }

@@ -4,6 +4,7 @@ import android.content.Context
 
 public  class AppPrefrencesHelper {
 
+    private val PRE_LANG= "Lan"
     private val USER_ID = "user_id"
     private val USER_SHARED_PREF = "user_file"
 
@@ -15,5 +16,15 @@ public  class AppPrefrencesHelper {
     public fun getLoggedInUserId(context: Context):Int{
         val sharedPref = context.getSharedPreferences(USER_SHARED_PREF,Context.MODE_PRIVATE)
         return sharedPref.getInt(USER_ID,0)
+    }
+
+    public fun savePreferredLanguage(context: Context, lg:String){
+        val sharedPref = context.getSharedPreferences(USER_SHARED_PREF,Context.MODE_PRIVATE)
+        sharedPref.edit().putString(PRE_LANG,lg).apply()
+    }
+
+    public fun getPreferredLanguage(context: Context): String? {
+        val sharedPref = context.getSharedPreferences(USER_SHARED_PREF,Context.MODE_PRIVATE)
+        return sharedPref.getString(PRE_LANG,"en")
     }
 }

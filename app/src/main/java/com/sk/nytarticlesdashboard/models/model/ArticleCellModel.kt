@@ -10,4 +10,15 @@ data class ArticleCellModel(
     val title:String,
     val imageUrl:String? =null,
     val date:String,
-)
+){
+    fun doesMatchSearchQuery(query: String): Boolean {
+        val matchingCombinations = listOf(
+            "$title",
+            "${title.first()}",
+        )
+
+        return matchingCombinations.any {
+            it.contains(query, ignoreCase = true)
+        }
+    }
+}

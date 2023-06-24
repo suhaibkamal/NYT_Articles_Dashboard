@@ -1,9 +1,27 @@
 <resources>
-    <string name="app_name">NYT Articles Dashboard</string>
-    <string name="title_activity_splash">SplashActivity</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="title_activity_auth">AuthActivity</string>
+    <string name="app_name" translatable="false">NYT Articles Dashboard</string>
+    <string name="title_activity_splash" translatable="false">SplashActivity</string>
+    <string name="title_activity_home" translatable="false">HomeActivity</string>
+    <string name="title_activity_auth" translatable="false">AuthActivity</string>
 
-    <string name="api_key">EG70maU2TCqToYVlepbhUFCChgOGp2FU</string>
+    <string name="api_key" translatable="false">EG70maU2TCqToYVlepbhUFCChgOGp2FU</string>
     <string name="server_error">An unknown error occurred.</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="more">more</string>
+    <string name="register">Register</string>
+    <string name="password">Password</string>
+    <string name="date_of_birth_must_be_selected">Date of Birth Must Not be Empty</string>
+    <string name="this_field_must_not_be_empty">This field must not be empty</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="national_id">National Id</string>
+    <string name="email">Email</string>
+    <string name="full_name">Full Name</string>
+    <string name="details">Details</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="language">Language</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
+    <string name="select_your_language_please">Select your Language Please</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
 </resources>

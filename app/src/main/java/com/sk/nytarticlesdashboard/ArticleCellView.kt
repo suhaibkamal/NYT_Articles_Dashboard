@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.sk.nytarticlesdashboard.base.DateTimeHelper
 import com.sk.nytarticlesdashboard.models.model.ArticleCellModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 
@@ -70,9 +71,9 @@ fun ArticleCellView(articleCellModel: ArticleCellModel) {
 
 
                 )
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(35.dp))
                 Text(
-                    text = articleCellModel.date, modifier = Modifier
+                    text = DateTimeHelper().getRelativeTimeSpanString(articleCellModel.date), modifier = Modifier
                         .fillMaxWidth()
 
                 )

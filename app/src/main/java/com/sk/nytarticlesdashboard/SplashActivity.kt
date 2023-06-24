@@ -19,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import com.sk.nytarticlesdashboard.base.AppPrefrencesHelper
+import com.sk.nytarticlesdashboard.base.LocalHelper
 import com.sk.nytarticlesdashboard.flow.splash.SplashViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +37,8 @@ class SplashActivity : ComponentActivity() {
     private val viewModel:SplashViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LocalHelper().setLocal(AppPrefrencesHelper().getPreferredLanguage(this), context = this)
+
         setContent {
             NYTArticlesDashboardTheme {
                 // A surface container using the 'background' color from the theme
