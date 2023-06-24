@@ -7,12 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 
 
 
 @Composable
-fun DashboardScreen(modifier: Modifier = Modifier) {
+fun DashboardScreen(modifier: Modifier = Modifier ,viewModel:HomeViewModel) {
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -24,8 +25,8 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
                modifier = modifier.size(width = 250.dp, height = 250.dp)
            )*/
 
-        items(20){
-            ArticleCellView()
+        items(viewModel.articlesState.size){
+            ArticleCellView(viewModel.articlesState[it])
         }
     }
 }
@@ -34,6 +35,6 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
 @Composable
 fun DashboardScreenPreview() {
     NYTArticlesDashboardTheme() {
-        DashboardScreen()
+        //DashboardScreen()
     }
 }

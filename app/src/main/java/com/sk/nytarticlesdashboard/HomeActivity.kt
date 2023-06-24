@@ -3,6 +3,7 @@ package com.sk.nytarticlesdashboard
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,9 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
+    private val viewModel:HomeViewModel by viewModels()
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +43,7 @@ class HomeActivity : ComponentActivity() {
                             titleContentColor = MaterialTheme.colorScheme.onPrimary
                         )) },
                         content = {
-                            MainScreen(modifier = Modifier.padding(paddingValues = it))
+                            MainScreen(modifier = Modifier.padding(paddingValues = it),viewModel)
                         })
                 }
             }
@@ -52,6 +58,6 @@ class HomeActivity : ComponentActivity() {
 @Composable
 fun HomePreview() {
     NYTArticlesDashboardTheme {
-        MainScreen()
+       // MainScreen(viewModel = viewModel)
     }
 }

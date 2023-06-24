@@ -3,4 +3,7 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_auth">AuthActivity</string>
+
+    <string name="api_key">EG70maU2TCqToYVlepbhUFCChgOGp2FU</string>
+    <string name="server_error">An unknown error occurred.</string>
 </resources>

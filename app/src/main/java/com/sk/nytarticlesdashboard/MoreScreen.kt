@@ -27,10 +27,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 
 @Composable
-fun MoreScreen(modifier: Modifier = Modifier) {
+fun MoreScreen(modifier: Modifier = Modifier,homeViewModel: HomeViewModel) {
 
     Column(
         modifier = Modifier.fillMaxSize().padding(40.dp).verticalScroll(rememberScrollState()),
@@ -52,7 +53,7 @@ fun MoreScreen(modifier: Modifier = Modifier) {
                     .padding(top = 10.dp, end = 10.dp, bottom = 10.dp)
             ) {
                 Text(
-                    text = "User Name",
+                    text = homeViewModel.userState.fullName,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
                     modifier = Modifier
@@ -63,7 +64,7 @@ fun MoreScreen(modifier: Modifier = Modifier) {
                 )
 
                 Text(
-                    text = "email", modifier = Modifier
+                    text =  homeViewModel.userState.email, modifier = Modifier
                         .padding(start = 10.dp)
                         .fillMaxWidth()
 
@@ -89,7 +90,7 @@ fun MoreScreen(modifier: Modifier = Modifier) {
         )
 
         Text(
-            text = "123456789", modifier = Modifier
+            text = homeViewModel.userState.nationalNumber, modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
                 .fillMaxWidth()
 
@@ -101,7 +102,7 @@ fun MoreScreen(modifier: Modifier = Modifier) {
 
         )
         Text(
-            text = "+962777940049", modifier = Modifier
+            text = homeViewModel.userState.phone, modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
                 .fillMaxWidth()
 
@@ -114,7 +115,7 @@ fun MoreScreen(modifier: Modifier = Modifier) {
 
         )
         Text(
-            text = "DD-MM-YYYY", modifier = Modifier
+            text = homeViewModel.userState.dateOfBirth, modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
                 .fillMaxWidth()
 
@@ -152,6 +153,6 @@ fun MoreScreen(modifier: Modifier = Modifier) {
 @Composable
 fun MoreScreenPreview() {
     NYTArticlesDashboardTheme() {
-        MoreScreen()
+
     }
 }

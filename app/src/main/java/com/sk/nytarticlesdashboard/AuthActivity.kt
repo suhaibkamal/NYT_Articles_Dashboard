@@ -1,15 +1,18 @@
 package com.sk.nytarticlesdashboard
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
+import android.widget.DatePicker
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +26,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,49 +34,50 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.key.Key.Companion.Tab
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role.Companion.Tab
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sk.nytarticlesdashboard.flow.auth.AuthViewModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
+
+@AndroidEntryPoint
 class AuthActivity : ComponentActivity() {
+
+
+
+
+    private val viewModel: AuthViewModel by viewModels()
 
     val tabs =
         listOf(
             TabItem(
                 title = "Login",
-                screen = { LoginScreen() }
+                screen = { LoginScreen(viewModel = viewModel) }
             ),
             TabItem(
                 title = "Register",
-                screen = { RegisterScreen() }
+                screen = { RegisterScreen(viewModel =viewModel) }
             ),
         )
-
-
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,61 +128,97 @@ class AuthActivity : ComponentActivity() {
 }
 
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-
+viewModel: AuthViewModel
 ) {
 
     val mContext = LocalContext.current
-    Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
-
-    ) {
-
-        Image(
-            painter = painterResource(id = R.drawable.new_york_times_t_icon),
-            contentDescription = null,
+    if(viewModel.authState){
+        val intent = Intent(mContext, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        mContext.startActivity(intent)
+    }else {
+        Column(
             modifier = Modifier
-                .size(width = 120.dp, 120.dp)
-                .padding(top = 20.dp)
-        )
-        OutlinedTextField(value = "", onValueChange ={
-            it.length
-        } , label = { Text(text = "Email")}, modifier = Modifier
-            .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
-            .fillMaxWidth())
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
 
-        OutlinedTextField(value = "", onValueChange ={
-            it.length
-        } , label = { Text(text = "Password")}, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password), modifier = Modifier
-            .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
-            .fillMaxWidth())
+        ) {
 
-        Button(
-            onClick = {
+            Image(
+                painter = painterResource(id = R.drawable.new_york_times_t_icon),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(width = 120.dp, 120.dp)
+                    .padding(top = 20.dp)
+            )
+            OutlinedTextField(value = viewModel.loginEmailState, onValueChange = {
+                viewModel.loginEmailState = it
+            }, isError = viewModel.loginEmailStateError,
+                supportingText = {
+                    if(viewModel.loginEmailStateError){
+                        Text(text = "this field must not be empty")
+                    }
+                },
+                label = { Text(text = "Email") }, modifier = Modifier
+                    .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
+                    .fillMaxWidth()
+            )
 
-                      mContext.startActivity(Intent(mContext,HomeActivity::class.java))
+            OutlinedTextField(value = viewModel.loginPasswordState,
+                onValueChange = {
+                    viewModel.loginPasswordState = it
+                },
+                isError = viewModel.loginPasswordStateError,
+                supportingText = {
+                if(viewModel.loginPasswordStateError){
+                    Text(text = "this field must not be empty")
+                }
+                },
+                label = { Text(text = "Password") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                modifier = Modifier
+                    .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
+                    .fillMaxWidth()
+            )
 
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary),
-            modifier = Modifier
-            .padding(top=20.dp,bottom = 20.dp, start = 20.dp, end = 20.dp)
-            .fillMaxWidth()) {
+            Button(
+                onClick = {
 
-            Text(text = "Login")
+                    viewModel.login()
 
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                modifier = Modifier
+                    .padding(top = 20.dp, bottom = 20.dp, start = 20.dp, end = 20.dp)
+                    .fillMaxWidth()
+            ) {
+
+                Text(text = "Login")
+
+            }
         }
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-
+viewModel: AuthViewModel
 ) {
+    val mContext = LocalContext.current
+
+
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -190,51 +229,97 @@ fun RegisterScreen(
                 .size(width = 120.dp, 120.dp)
                 .padding(top = 20.dp)
         )
-        OutlinedTextField(value = "", onValueChange = {
-            it.length
-        }, label = { Text(text = "Full Name") }, modifier = Modifier
+        OutlinedTextField(value = viewModel.registerFullNameState, onValueChange = {
+            viewModel.registerFullNameState =it
+        }, label = { Text(text = "Full Name") }, isError = viewModel.registerFullNameStateError,
+            supportingText = {
+                if(viewModel.registerFullNameStateError) {
+                    Text(text = "this field must not be empty")
+                }
+            }, modifier = Modifier
             .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
             .fillMaxWidth()
         )
 
-        OutlinedTextField(value = "", onValueChange = {
-            it.length
-        }, label = { Text(text = "Email") }, modifier = Modifier
-            .padding( start = 20.dp, end = 20.dp, bottom = 20.dp)
+        OutlinedTextField(value = viewModel.registerEmailState, onValueChange = {
+            viewModel.registerEmailState = it
+        }, label = { Text(text = "Email") } , isError = viewModel.registerEmailStateError,
+            supportingText = {
+                if(viewModel.registerEmailStateError) {
+                    Text(text = "this field must not be empty")
+                }
+            },modifier = Modifier
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
             .fillMaxWidth()
         )
 
-        OutlinedTextField(value = "", onValueChange = {
-            it.length
-        }, label = { Text(text = "National ID") }, modifier = Modifier
-            .padding( start = 20.dp, end = 20.dp, bottom = 20.dp)
+        OutlinedTextField(value = viewModel.registerNationalIDState, onValueChange = {
+            viewModel.registerNationalIDState= it
+        }, label = { Text(text = "National ID") }, isError = viewModel.registerNationalIDStateError,
+            supportingText = {
+                if(viewModel.registerNationalIDStateError) {
+                    Text(text = "this field must not be empty")
+                }
+            },modifier = Modifier
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
             .fillMaxWidth()
         )
 
-        OutlinedTextField(value = "", onValueChange = {
-            it.length
-        }, label = { Text(text = "Phone Number") }, modifier = Modifier
-            .padding( start = 20.dp, end = 20.dp, bottom = 20.dp)
+        OutlinedTextField(value =viewModel.registerPhoneState, onValueChange = {
+            viewModel.registerPhoneState = it
+        }, label = { Text(text = "Phone Number") }, isError = viewModel.registerPhoneStateError,
+            supportingText = {
+                if(viewModel.registerPhoneStateError) {
+                    Text(text = "this field must not be empty")
+                }
+            }, modifier = Modifier
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
             .fillMaxWidth()
         )
 
         OutlinedButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+
+                      showDatePicker(mContext,viewModel);
+
+                      },
             contentPadding = PaddingValues(17.dp),
 
             shape = RoundedCornerShape(5.dp),
             modifier = Modifier
-                .padding( bottom = 20.dp, start = 20.dp, end = 20.dp)
+                .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
                 .fillMaxWidth()
 
         ) {
 
-            Text(text = "Date Of Birth", textAlign = TextAlign.Start, fontWeight = FontWeight.Normal,modifier = Modifier.fillMaxWidth())
+            if(viewModel.registerDateOfBirthStateError){
+                Text(
+                    text = "Date of birth must be selected",
+                    textAlign = TextAlign.Start,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Red,
+                    modifier = Modifier.fillMaxWidth()
+
+                )
+            }else {
+                Text(
+                    text = viewModel.registerDateOfBirthState,
+                    textAlign = TextAlign.Start,
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
 
-        OutlinedTextField(value = "",
+        OutlinedTextField(value = viewModel.registerPasswordState,
             onValueChange = {
-                it.length
+                viewModel.registerPasswordState = it
+            },
+            isError = viewModel.registerPasswordStateError,
+            supportingText = {
+                if(viewModel.registerPasswordStateError) {
+                    Text(text = "this field must not be empty")
+                }
             },
             label = { Text(text = "Password") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -244,7 +329,7 @@ fun RegisterScreen(
         )
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { viewModel.registerUser()},
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
@@ -258,6 +343,24 @@ fun RegisterScreen(
         }
     }
 }
+
+fun showDatePicker(context: Context,viewModel: AuthViewModel) {
+
+    val c: Calendar = Calendar.getInstance()
+    val year: Int = c.get(Calendar.YEAR)
+    val month: Int = c.get(Calendar.MONTH)
+    val day: Int = c.get(Calendar.DAY_OF_MONTH)
+
+    val datePickerDialog = DatePickerDialog(
+        context, DatePickerDialog.OnDateSetListener { datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
+            viewModel.registerDateOfBirthState= String.format("%d-%d-%d",i2,i1,i)
+            viewModel.registerDateOfBirthStateError= false
+        },year, month, day)
+    datePickerDialog.datePicker.maxDate = c.timeInMillis
+
+    datePickerDialog.show();
+}
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

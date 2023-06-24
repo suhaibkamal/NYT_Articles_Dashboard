@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
+
 /**
 #     #     #   #
 #           #  #
@@ -17,16 +19,16 @@ import androidx.navigation.compose.composable
  */
 
 @Composable
-fun BottomNavHosts(navController: NavHostController) {
+fun BottomNavHosts(navController: NavHostController,viewModel: HomeViewModel) {
     NavHost(
         navController = navController,
         startDestination = BottomNavScreen.DashboardScreen.route
     ) {
         composable(route = BottomNavScreen.DashboardScreen.route) {
-            DashboardScreen()
+            DashboardScreen(viewModel=viewModel)
         }
         composable(route = BottomNavScreen.MoreScreen.route) {
-           MoreScreen()
+           MoreScreen(homeViewModel =viewModel)
         }
 
     }

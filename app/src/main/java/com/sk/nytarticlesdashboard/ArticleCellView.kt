@@ -27,21 +27,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.sk.nytarticlesdashboard.models.model.ArticleCellModel
 import com.sk.nytarticlesdashboard.ui.theme.NYTArticlesDashboardTheme
 
 
 @Composable
-fun ArticleCellView() {
+fun ArticleCellView(articleCellModel: ArticleCellModel) {
 
     Column {
         Row(Modifier.fillMaxWidth()) {
-            Image(
-                painter = painterResource(id = R.drawable.baseline_image_24),
-                contentDescription = null,
-                Modifier
-                    .padding(10.dp)
-                    .size(100.dp)
-            )
+            if(!articleCellModel.imageUrl.isNullOrEmpty()) {
+                AsyncImage(
+                    model = articleCellModel.imageUrl,
+                    contentDescription = null,
+                    Modifier
+                        .padding(10.dp)
+                        .size(100.dp)
+                )
+            }else{
+
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_image_24),
+                    contentDescription = null,
+                    Modifier
+                        .padding(10.dp)
+                        .size(100.dp)
+                )
+            }
 
             Column(
                 Modifier
@@ -49,7 +62,7 @@ fun ArticleCellView() {
                     .padding(top = 10.dp, end = 10.dp, bottom = 10.dp)
             ) {
                 Text(
-                    text = "article title",
+                    text = articleCellModel.title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
                     modifier = Modifier
@@ -59,7 +72,7 @@ fun ArticleCellView() {
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(
-                    text = "1 day", modifier = Modifier
+                    text = articleCellModel.date, modifier = Modifier
                         .fillMaxWidth()
 
                 )
@@ -75,7 +88,6 @@ fun ArticleCellView() {
 fun CellPreview() {
     NYTArticlesDashboardTheme {
 
-        ArticleCellView(
-        )
+
     }
 }

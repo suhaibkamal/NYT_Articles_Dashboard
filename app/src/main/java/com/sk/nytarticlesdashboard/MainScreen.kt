@@ -21,19 +21,19 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-
+import com.sk.nytarticlesdashboard.flow.home.HomeViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(modifier: Modifier = Modifier,viewModel: HomeViewModel) {
     val navController = rememberNavController()
     Scaffold(
         modifier = modifier,
         bottomBar = { BottomBar(navController = navController) }
     ) {
         Box(modifier = Modifier.padding(paddingValues = it)) {
-            BottomNavHosts(navController = navController)
+            BottomNavHosts(navController = navController,viewModel)
 
         }
     }
